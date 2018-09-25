@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <fragment
+        android:id="@+id/ar_fragment"
+        android:name="com.swarmnyc.arswarm.SwarmArFragment"
+        android:layout_height="match_parent" android:layout_width="match_parent" />
+
+
+
+    <LinearLayout
+        android:id="@+id/debug_panel"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/scale_up"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="+ S" />
+
+            <Button
+                android:id="@+id/scale_down"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="- S" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/add_x"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="+ X" />
+
+            <Button
+                android:id="@+id/minus_x"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="- X" />
+
+            <Button
+                android:id="@+id/add_y"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="+ Y" />
+
+            <Button
+                android:id="@+id/minus_y"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="- Y" />
+
+            <Button
+                android:id="@+id/add_z"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="+ Z" />
+
+            <Button
+                android:id="@+id/minus_z"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="- Z" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
