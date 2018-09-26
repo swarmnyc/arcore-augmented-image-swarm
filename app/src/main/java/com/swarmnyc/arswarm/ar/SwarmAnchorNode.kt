@@ -58,6 +58,7 @@ class SwarmAnchorNode : AnchorNode() {
 abstract class AugmentedImageNode(private val modelWidth: Float, private val modelHeight: Float, private val resource: Renderable) : Node() {
     var scaleWidth: Float = 1f
     var scaleHeight: Float = 1f
+    var scaleDeep: Float = 1f
     var offsetX: Float = 0.0f
     var offsetY: Float = 0.0f
     var offsetZ: Float = 0.0f
@@ -65,6 +66,8 @@ abstract class AugmentedImageNode(private val modelWidth: Float, private val mod
 
     fun init(node: SwarmAnchorNode): AugmentedImageNode {
         host = node
+        name = this.javaClass.simpleName.replace("AugmentedImageNode", "")
+
         setParent(node)
 
         renderable = resource
@@ -79,15 +82,16 @@ abstract class AugmentedImageNode(private val modelWidth: Float, private val mod
     open fun initLayout() {
         scaleWidth = host.width / modelWidth
         scaleHeight = host.height / modelHeight
+        scaleDeep = scaleWidth
     }
 
     fun modifyLayout(config: (AugmentedImageNode.() -> Unit)? = null) {
         if (config != null) config()
 
-        localScale = Vector3(scaleWidth, scaleWidth, scaleWidth)
+        localScale = Vector3(scaleWidth, scaleWidth, scaleDeep)
         localPosition = Vector3(offsetX, offsetY, offsetZ)
 
-        Logger.d("${javaClass.simpleName} modifyLayout: scale: ($scaleWidth, $scaleHeight), xyc: ($offsetX, $offsetY, $offsetZ)")
+        Logger.d("${javaClass.simpleName} modifyLayout: scale: ($scaleWidth, $scaleHeight, $scaleDeep), xyc: ($offsetX, $offsetY, $offsetZ)")
     }
 }
 

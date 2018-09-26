@@ -2,6 +2,7 @@ package com.swarmnyc.arswarm.app
 
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import com.google.ar.sceneform.HitTestResult
 import com.swarmnyc.arswarm.BuildConfig
 import com.swarmnyc.arswarm.R
@@ -28,13 +29,17 @@ class MainActivity : MainBaseActivity() {
         Logger.d("touched: ${hitTestResult.node}")
 
         selectNode = hitTestResult.node as? AugmentedImageNode
-
-        return false
+        return if (selectNode != null) {
+            Toast.makeText(this, "${selectNode?.name} selected", Toast.LENGTH_SHORT).show()
+            false
+        } else {
+            true
+        }
     }
 
     private fun debugInit() {
         if (BuildConfig.DEBUG) {
-//            findViewById<View>(R.id.debug_panel).visibility = View.VISIBLE
+            findViewById<View>(R.id.debug_panel).visibility = View.VISIBLE
             val offset = 0.001f
             findViewById<View>(R.id.add_x).setOnClickListener {
                 selectNode?.modifyLayout {
@@ -70,12 +75,17 @@ class MainActivity : MainBaseActivity() {
             findViewById<View>(R.id.scale_up).setOnClickListener {
                 selectNode?.modifyLayout {
                     scaleWidth += offset
+                    scaleHeight += offset
+                    scaleDeep += offset
                 }
             }
 
             findViewById<View>(R.id.scale_down).setOnClickListener {
                 selectNode?.modifyLayout {
                     scaleWidth -= offset
+                    scaleHeight -= offset
+                    scaleDeep -= offset
+
                 }
             }
         }
