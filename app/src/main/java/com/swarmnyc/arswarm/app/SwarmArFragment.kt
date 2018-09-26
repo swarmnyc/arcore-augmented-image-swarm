@@ -11,6 +11,7 @@ import com.google.ar.core.*
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.ux.ArFragment
+import com.swarmnyc.arswarm.ar.AugmentedImageAnchorNode
 import com.swarmnyc.arswarm.ar.SwarmAnchorNode
 import com.swarmnyc.arswarm.utils.Logger
 
@@ -19,7 +20,7 @@ class SwarmArFragment : ArFragment() {
         private val ArImages = mapOf("swarm" to "swarm.png")
     }
 
-    private val trackableMap = mutableMapOf<String, SwarmAnchorNode>()
+    private val trackableMap = mutableMapOf<String, AugmentedImageAnchorNode>()
 
     var setOnStarted: (() -> Unit)? = null
 

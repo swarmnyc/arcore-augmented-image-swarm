@@ -12,16 +12,13 @@ import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import com.swarmnyc.arswarm.BuildConfig
-import com.swarmnyc.arswarm.R
 import com.swarmnyc.arswarm.ar.Renderables
-import com.swarmnyc.arswarm.utils.Logger
 
 /**
  * for check permissions and load resource
  */
-abstract class MainBaseActivity : AppCompatActivity() {
+abstract class ArBaseActivity : AppCompatActivity() {
     companion object {
         private const val RequestCodeARCode = 100
         private const val RequestCodePermission = 200
@@ -32,8 +29,6 @@ abstract class MainBaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
 
         checkArCore()
     }
