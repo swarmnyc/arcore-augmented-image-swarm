@@ -22,7 +22,9 @@
             android:value="required" />
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".app.MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="locked">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,11 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="locked" />
     </application>
 
 </manifest>

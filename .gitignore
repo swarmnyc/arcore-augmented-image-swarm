@@ -1,10 +1,12 @@
 *.iml
 *.sfb
 *.sfa
+*.blend1
+*.imgdb-imglist.txt
+**/build
 .gradle
 .DS_Store
 .externalNativeBuild
 /local.properties
 /.idea
 /captures
-**/build

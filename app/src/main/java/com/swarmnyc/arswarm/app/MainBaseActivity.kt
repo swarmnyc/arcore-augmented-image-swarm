@@ -1,4 +1,4 @@
-package com.swarmnyc.arswarm
+package com.swarmnyc.arswarm.app
 
 import android.Manifest
 import android.app.ActivityManager
@@ -12,8 +12,16 @@ import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import com.swarmnyc.arswarm.BuildConfig
+import com.swarmnyc.arswarm.R
+import com.swarmnyc.arswarm.ar.Renderables
+import com.swarmnyc.arswarm.utils.Logger
 
-class SplashActivity : AppCompatActivity() {
+/**
+ * for check permissions and load resource
+ */
+abstract class MainBaseActivity : AppCompatActivity() {
     companion object {
         private const val RequestCodeARCode = 100
         private const val RequestCodePermission = 200
@@ -24,7 +32,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+
+        setContentView(R.layout.activity_main)
 
         checkArCore()
     }
@@ -63,7 +72,7 @@ class SplashActivity : AppCompatActivity() {
         askTime++
 
         if (requiredPermissions.isEmpty()) {
-            goToMain()
+            loadRenderables()
         } else {
             if (askTime > 2 || ActivityCompat.shouldShowRequestPermissionRationale(this, requiredPermissions.values.first())) {
                 alertPermissions()
@@ -132,8 +141,24 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+    private fun loadRenderables() {
+        Renderables.init(this).thenAcceptAsync {
+            runOnUiThread {
+                startAr()
+            }
+        }.exceptionally {
+            com.swarmnyc.arswarm.utils.Logger.e("Load resource failed", it)
+            AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage("Load resources failed!")
+                    .setPositiveButton("Close App") { _, _ ->
+                        finish()
+                    }
+                    .setCancelable(false)
+                    .show()
+            null
+        }
     }
+
+    abstract fun startAr()
 }
