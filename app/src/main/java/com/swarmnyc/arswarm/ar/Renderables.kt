@@ -12,9 +12,14 @@ object Renderables {
         swarmRendereable = ModelRenderable.builder().setSource(context, Uri.parse("swarm.sfb")).build()
         makeAppRendereable = ModelRenderable.builder().setSource(context, Uri.parse("we-make-app.sfb")).build()
         heartRendereable = ModelRenderable.builder().setSource(context, Uri.parse("heart.sfb")).build()
-        wallRenderable = ViewRenderable.builder().setView(context, R.layout.view_wall).build()
+        wallRenderable = ViewRenderable.builder().setView(context, R.layout.view_wall)
+                .setVerticalAlignment(ViewRenderable.VerticalAlignment.CENTER)
+                .build()
 
-        return CompletableFuture.allOf(swarmRendereable, makeAppRendereable, heartRendereable, wallRenderable)
+        return CompletableFuture.allOf(swarmRendereable,
+                makeAppRendereable,
+                heartRendereable,
+                wallRenderable)
     }
 
     lateinit var swarmRendereable: CompletableFuture<ModelRenderable>

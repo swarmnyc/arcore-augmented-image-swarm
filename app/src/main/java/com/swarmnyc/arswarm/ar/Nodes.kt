@@ -75,4 +75,10 @@ class HeartAugmentedImageNode : AugmentedImageNode(Renderables.heartRendereable)
     }
 }
 
-class WallAugmentedImageNode : AugmentedImageNode(Renderables.wallRenderable)
+class WallAugmentedImageNode : AugmentedImageNode(Renderables.wallRenderable){
+    override fun modifyLayout() {
+        super.modifyLayout()
+
+        localRotation = Quaternion(Vector3(1f, 0f, 0f), -90f)
+    }
+}

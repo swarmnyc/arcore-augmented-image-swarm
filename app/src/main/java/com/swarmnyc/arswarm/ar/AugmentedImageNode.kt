@@ -36,10 +36,14 @@ abstract class AugmentedImageNode(resource: CompletableFuture<*>) : Node() {
         scaledDeep = host.scaledWidth
     }
 
-    fun modifyLayout(config: (AugmentedImageNode.() -> Unit)? = null) {
-        if (config != null) config()
+    fun modifyLayout(config: AugmentedImageNode.() -> Unit) {
+        config()
 
-        localScale = Vector3(scaledWidth, scaledWidth, scaledDeep)
+        modifyLayout()
+    }
+
+    open fun modifyLayout() {
+        localScale = Vector3(scaledWidth, scaledHeight, scaledDeep)
         localPosition = Vector3(offsetX, offsetY, offsetZ)
 
         Logger.d("${javaClass.simpleName} modifyLayout: scale: ($scaledWidth, $scaledHeight, $scaledDeep), xyc: ($offsetX, $offsetY, $offsetZ)")

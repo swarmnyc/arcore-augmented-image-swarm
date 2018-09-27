@@ -1,6 +1,5 @@
 package com.swarmnyc.arswarm.app
 
-import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
@@ -13,11 +12,7 @@ import com.swarmnyc.arswarm.utils.Logger
 class MainActivity : ArBaseActivity() {
     private lateinit var arFragment: SwarmArFragment
     private var selectNode: AugmentedImageNode? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
+    override val viewId: Int =R.layout.activity_main
 
     override fun startAr() {
         arFragment = SwarmArFragment()

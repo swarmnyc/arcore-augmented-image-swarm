@@ -9,10 +9,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.support.annotation.LayoutRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import com.google.ar.sceneform.rendering.ViewRenderable
 import com.swarmnyc.arswarm.BuildConfig
+import com.swarmnyc.arswarm.R
 import com.swarmnyc.arswarm.ar.Renderables
 
 /**
@@ -25,10 +28,14 @@ abstract class ArBaseActivity : AppCompatActivity() {
     }
 
     private var askTime = 0
-    private val requiredPermissions = mutableMapOf("camera" to Manifest.permission.CAMERA)
+    private val requiredPermissions = mutableMapOf(Manifest.permission.CAMERA to "camera")
+
+    protected abstract val viewId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setContentView(viewId)
 
         checkArCore()
     }
@@ -55,7 +62,7 @@ abstract class ArBaseActivity : AppCompatActivity() {
     private fun checkPermissions() {
         requiredPermissions.forEach {
             // require CAMERA
-            if (ContextCompat.checkSelfPermission(this, it.value) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, it.key) == PackageManager.PERMISSION_GRANTED) {
                 requiredPermissions.remove(it.key)
             }
         }
@@ -67,18 +74,18 @@ abstract class ArBaseActivity : AppCompatActivity() {
         askTime++
 
         if (requiredPermissions.isEmpty()) {
-            loadRenderables()
+            startAr()
         } else {
-            if (askTime > 2 || ActivityCompat.shouldShowRequestPermissionRationale(this, requiredPermissions.values.first())) {
+            if (askTime > 2 || ActivityCompat.shouldShowRequestPermissionRationale(this, requiredPermissions.keys.first())) {
                 alertPermissions()
             } else {
-                ActivityCompat.requestPermissions(this, requiredPermissions.values.toTypedArray(), RequestCodePermission)
+                ActivityCompat.requestPermissions(this, requiredPermissions.keys.toTypedArray(), RequestCodePermission)
             }
         }
     }
 
     private fun alertPermissions() {
-        val names = requiredPermissions.keys.joinToString(", ")
+        val names = requiredPermissions.values.joinToString(", ")
         val s = if (requiredPermissions.size == 1) {
             ""
         } else {
@@ -133,25 +140,6 @@ abstract class ArBaseActivity : AppCompatActivity() {
                     .show()
         } else {
             checkPermissions()
-        }
-    }
-
-    private fun loadRenderables() {
-        Renderables.init(this).thenAcceptAsync {
-            runOnUiThread {
-                startAr()
-            }
-        }.exceptionally {
-            com.swarmnyc.arswarm.utils.Logger.e("Load resource failed", it)
-            AlertDialog.Builder(this)
-                    .setTitle("Error")
-                    .setMessage("Load resources failed!")
-                    .setPositiveButton("Close App") { _, _ ->
-                        finish()
-                    }
-                    .setCancelable(false)
-                    .show()
-            null
         }
     }
 

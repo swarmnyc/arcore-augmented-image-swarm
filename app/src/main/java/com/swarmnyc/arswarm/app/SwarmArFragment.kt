@@ -1,17 +1,15 @@
 package com.swarmnyc.arswarm.app
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
 import com.google.ar.core.*
-import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.ux.ArFragment
 import com.swarmnyc.arswarm.ar.AugmentedImageAnchorNode
+import com.swarmnyc.arswarm.ar.Renderables
 import com.swarmnyc.arswarm.ar.SwarmAnchorNode
 import com.swarmnyc.arswarm.utils.Logger
 
@@ -26,6 +24,7 @@ class SwarmArFragment : ArFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
+        view!!.visibility = View.GONE
 
         // Turn off the plane discovery since we're only looking for ArImages
         planeDiscoveryController.hide()
@@ -33,7 +32,11 @@ class SwarmArFragment : ArFragment() {
         arSceneView.planeRenderer.isEnabled = false
         arSceneView.scene.addOnUpdateListener(::onUpdateFrame)
 
-        setOnStarted?.invoke()
+        Renderables.init(this.context!!).handle { _, _ ->
+            setOnStarted?.invoke()
+
+            view.visibility = View.VISIBLE
+        }
 
         return view
     }
@@ -72,7 +75,7 @@ class SwarmArFragment : ArFragment() {
         frame.getUpdatedTrackables(AugmentedImage::class.java).forEach { image ->
             when (image.trackingState) {
                 TrackingState.TRACKING -> if (trackableMap.contains(image.name)) {
-                    if (trackableMap[image.name]?.update(image) == true){
+                    if (trackableMap[image.name]?.update(image) == true) {
                         Logger.d("update node: ${image.name}(${image.index}), pose: ${image.centerPose}, ex: ${image.extentX}, ez: ${image.extentZ}")
                     }
                 } else {
@@ -83,7 +86,8 @@ class SwarmArFragment : ArFragment() {
 
                     trackableMap.remove(image.name)
                 }
-                else -> { }
+                else -> {
+                }
             }
         }
     }
