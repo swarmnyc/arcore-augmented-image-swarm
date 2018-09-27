@@ -1,26 +1,27 @@
 package com.swarmnyc.arswarm.ar
 
 import android.animation.ObjectAnimator
+import android.view.MotionEvent
 import android.view.animation.LinearInterpolator
+import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.QuaternionEvaluator
 import com.google.ar.sceneform.math.Vector3
 
-class SwarmAnchorNode : AugmentedImageAnchorNode() {
-    override val imageWidth: Float = 1F // 100 cm
-    override val imageHeight: Float = 0.6667f // 66.7 cm
 
-    override fun addNodes() {
-        WallAugmentedImageNode().init(this)
-        SwarmAugmentedImageNode().init(this)
-        MakeAppAugmentedImageNode().init(this)
-        HeartAugmentedImageNode().init(this)
+class SwarmScene1 : AugmentedImageNodeGroup() {
+    override fun onInit() {
+        WallAugmentedImageNode().init(anchorNode, this)
+        SwarmAugmentedImageNode().init(anchorNode, this)
+        MakeAppAugmentedImageNode().init(anchorNode, this)
+        HeartAugmentedImageNode().init(anchorNode, this)
+        HintSwipeAugmentedImageNode().init(anchorNode, this)
     }
 }
 
-class SwarmAugmentedImageNode : AugmentedImageNode( Renderables.swarmRendereable)
+class SwarmAugmentedImageNode : AugmentedImageNode(ArResources.swarmRendereable)
 
-class MakeAppAugmentedImageNode : AugmentedImageNode(Renderables.makeAppRendereable) {
+class MakeAppAugmentedImageNode : AugmentedImageNode(ArResources.makeAppRendereable) {
     override fun initLayout() {
         super.initLayout()
 
@@ -29,7 +30,7 @@ class MakeAppAugmentedImageNode : AugmentedImageNode(Renderables.makeAppRenderea
     }
 }
 
-class HeartAugmentedImageNode : AugmentedImageNode(Renderables.heartRendereable) {
+class HeartAugmentedImageNode : AugmentedImageNode(ArResources.heartRendereable) {
 
     private var animation: ObjectAnimator? = null
 
@@ -76,10 +77,30 @@ class HeartAugmentedImageNode : AugmentedImageNode(Renderables.heartRendereable)
     }
 }
 
-class WallAugmentedImageNode : AugmentedImageNode(Renderables.wallRenderable){
+class WallAugmentedImageNode : AugmentedImageNode(ArResources.wallRenderable) {
     override fun modifyLayout() {
         super.modifyLayout()
 
-        localRotation = Quaternion(Vector3(1f, 0f, 0f), -90f)
+        localRotation = ArResources.viewRenderableRotation
+    }
+}
+
+class HintSwipeAugmentedImageNode : AugmentedImageNode(ArResources.hintSwipeRenderable) {
+    override fun initLayout() {
+        super.initLayout()
+
+        // make it under
+        offsetZ = anchorNode.arHeight / 2 + anchorNode.arHeight * 0.1f
+    }
+
+    override fun modifyLayout() {
+        super.modifyLayout()
+
+        localRotation = ArResources.viewRenderableRotation
+    }
+
+    override fun onTouchEvent(p0: HitTestResult?, p1: MotionEvent?): Boolean {
+        isEnabled = false
+        return false
     }
 }

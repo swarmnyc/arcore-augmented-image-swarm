@@ -6,34 +6,57 @@ import com.google.ar.sceneform.rendering.Renderable
 import com.swarmnyc.arswarm.utils.Logger
 import java.util.concurrent.CompletableFuture
 
-abstract class AugmentedImageNode(resource: CompletableFuture<*>) : Node() {
+abstract class AugmentedImageNodeGroup : Node() {
+    lateinit var anchorNode: AugmentedImageAnchorNode
+
+    fun init(anchorNode: AugmentedImageAnchorNode): AugmentedImageNodeGroup {
+        this.anchorNode = anchorNode
+
+        name = this.javaClass.simpleName.replace("AugmentedImageNodeGroup", "")
+
+        setParent(anchorNode)
+
+        onInit()
+
+        return this
+    }
+
+    protected abstract fun onInit()
+
+}
+
+abstract class AugmentedImageNode(resource: CompletableFuture<*>? = null) : Node() {
     var scaledWidth: Float = 1f
     var scaledHeight: Float = 1f
     var scaledDeep: Float = 1f
     var offsetX: Float = 0.0f
     var offsetY: Float = 0.0f
     var offsetZ: Float = 0.0f
-    lateinit var host: AugmentedImageAnchorNode
+    lateinit var anchorNode: AugmentedImageAnchorNode
 
     init {
-        renderable = resource.getNow(null) as? Renderable
+        if (resource != null) {
+            renderable = resource.getNow(null) as? Renderable
+        }
     }
 
-    fun init(node: AugmentedImageAnchorNode) {
-        host = node
+    fun init(anchorNode: AugmentedImageAnchorNode, group: AugmentedImageNodeGroup? = null): AugmentedImageNode {
+        this.anchorNode = anchorNode
         name = this.javaClass.simpleName.replace("AugmentedImageNode", "")
 
-        setParent(node)
+        setParent(group ?: anchorNode)
 
         initLayout()
 
         modifyLayout()
+
+        return this
     }
 
     open fun initLayout() {
-        scaledWidth = host.scaledWidth
-        scaledHeight = host.scaledHeight
-        scaledDeep = host.scaledWidth
+        scaledWidth = anchorNode.scaledWidth
+        scaledHeight = anchorNode.scaledHeight
+        scaledDeep = anchorNode.scaledWidth
     }
 
     fun modifyLayout(config: AugmentedImageNode.() -> Unit) {

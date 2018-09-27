@@ -34,7 +34,7 @@ abstract class AugmentedImageAnchorNode : AnchorNode() {
 
         updateSize(Math.abs(image.extentX), Math.abs(image.extentZ))
 
-        addNodes()
+        onInit()
 
         return this
     }
@@ -66,5 +66,5 @@ abstract class AugmentedImageAnchorNode : AnchorNode() {
         scaledHeight = arHeight / imageHeight
     }
 
-    abstract fun addNodes()
+    protected abstract fun onInit()
 }

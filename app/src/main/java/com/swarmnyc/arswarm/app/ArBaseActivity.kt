@@ -9,14 +9,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.support.annotation.LayoutRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import com.google.ar.sceneform.rendering.ViewRenderable
 import com.swarmnyc.arswarm.BuildConfig
-import com.swarmnyc.arswarm.R
-import com.swarmnyc.arswarm.ar.Renderables
 
 /**
  * for check permissions and load resource

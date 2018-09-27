@@ -9,7 +9,7 @@ import com.google.ar.core.*
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.ux.ArFragment
 import com.swarmnyc.arswarm.ar.AugmentedImageAnchorNode
-import com.swarmnyc.arswarm.ar.Renderables
+import com.swarmnyc.arswarm.ar.ArResources
 import com.swarmnyc.arswarm.ar.SwarmAnchorNode
 import com.swarmnyc.arswarm.utils.Logger
 
@@ -32,13 +32,22 @@ class SwarmArFragment : ArFragment() {
         arSceneView.planeRenderer.isEnabled = false
         arSceneView.scene.addOnUpdateListener(::onUpdateFrame)
 
-        Renderables.init(this.context!!).handle { _, _ ->
+        ArResources.init(this.context!!).handle { _, _ ->
             setOnStarted?.invoke()
 
             view.visibility = View.VISIBLE
         }
 
         return view
+    }
+
+    override fun onPause() {
+        super.onPause()
+        trackableMap.forEach {
+            arSceneView.scene.removeChild(it.value)
+        }
+
+        trackableMap.clear()
     }
 
     override fun getSessionConfiguration(session: Session): Config {
