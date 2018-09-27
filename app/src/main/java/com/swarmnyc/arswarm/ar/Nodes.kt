@@ -37,6 +37,7 @@ class HeartAugmentedImageNode : AugmentedImageNode(Renderables.heartRendereable)
         super.initLayout()
 
         offsetX = 0.22299f * scaledWidth
+        offsetY = 0.01f
         offsetZ = 0.2142f * scaledHeight
     }
 
