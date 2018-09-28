@@ -1,9 +1,7 @@
 package com.swarmnyc.arswarm.app
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import com.google.ar.core.*
 import com.google.ar.sceneform.FrameTime
@@ -30,6 +28,10 @@ class SwarmArFragment : ArFragment() {
         planeDiscoveryController.hide()
         planeDiscoveryController.setInstructionView(null)
         arSceneView.planeRenderer.isEnabled = false
+        arSceneView.scene.setOnTouchListener { _, motionEvent ->
+            swarmAnGestureDetector.onTouchEvent(motionEvent)
+        }
+
         arSceneView.scene.addOnUpdateListener(::onUpdateFrame)
 
         ArResources.init(this.context!!).handle { _, _ ->
@@ -73,7 +75,7 @@ class SwarmArFragment : ArFragment() {
         }
     }
 
-    private fun onUpdateFrame(frameTime: FrameTime?) {
+    private fun onUpdateFrame(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime?) {
         val frame = arSceneView.arFrame
 
         // If there is no frame or ARCore is not tracking yet, just return.
@@ -100,5 +102,47 @@ class SwarmArFragment : ArFragment() {
             }
         }
     }
+
+
+    private val swarmAnGestureDetector = GestureDetector(null, object : GestureDetector.OnGestureListener {
+        private val SWIPE_DISTANCE_THRESHOLD = 100
+        private val SWIPE_VELOCITY_THRESHOLD = 100
+
+        override fun onShowPress(e: MotionEvent?) {}
+
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            return false
+        }
+
+        override fun onDown(e: MotionEvent?): Boolean {
+            return true
+        }
+
+        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            val swarmAN = trackableMap["swarm"] as? SwarmAnchorNode
+
+            if (swarmAN != null && swarmAN.isActive) {
+                val distanceX = e2.x - e1.x
+                val distanceY = e2.y - e1.y
+                if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (distanceX > 0) {
+                        swarmAN.forwardScene()
+                    } else {
+                        swarmAN.backwardScene()
+                    }
+
+                    return true
+                }
+            }
+
+            return false
+        }
+
+        override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+            return false
+        }
+
+        override fun onLongPress(e: MotionEvent?) {}
+    })
 
 }

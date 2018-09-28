@@ -19,8 +19,6 @@ class WebImageAugmentedImageNode : AugmentedImageNode(ArResources.webImageRender
 
         localRotation = ArResources.viewRenderableRotation
     }
-
-
 }
 
 class VisitAugmentedImageNode : AugmentedImageNode(ArResources.visitRenderable) {
@@ -29,7 +27,6 @@ class VisitAugmentedImageNode : AugmentedImageNode(ArResources.visitRenderable) 
 
         // make it under
         offsetZ = anchorNode.arHeight / 2 + anchorNode.arHeight * 0.1f
-
     }
 
     override fun modifyLayout() {

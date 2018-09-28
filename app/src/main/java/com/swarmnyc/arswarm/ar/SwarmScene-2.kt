@@ -11,11 +11,14 @@ class VideoAugmentedImageNode : AugmentedImageNode(ArResources.videoRenderable) 
     override fun initLayout() {
         super.initLayout()
 
+        // the renderable is rectangle, so it have to scale to r
+        val videoRatio = ArResources.videoPlayer.videoWidth.toFloat() / ArResources.videoPlayer.videoHeight
+
         offsetZ = (anchorNode.arHeight / 2.0f)
-        // make it a little bigger
-        scaledWidth *= 1.1f
-        // make the ratio to 4/3
-        scaledHeight = scaledHeight * 1.1f / 1.6f
+
+        // make video a little bigger to cover the while image
+        scaledWidth *= 1.2f
+        scaledHeight = scaledHeight * 1.2f / videoRatio
         scaledDeep = 1f
         localRotation = ArResources.viewRenderableRotation
     }
