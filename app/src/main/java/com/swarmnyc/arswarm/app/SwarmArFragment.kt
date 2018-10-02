@@ -12,10 +12,6 @@ import com.swarmnyc.arswarm.ar.SwarmAnchorNode
 import com.swarmnyc.arswarm.utils.Logger
 
 class SwarmArFragment : ArFragment() {
-    companion object {
-        private val ArImages = mapOf("swarm" to "swarm.png")
-    }
-
     private val trackableMap = mutableMapOf<String, AugmentedImageAnchorNode>()
 
     var setOnStarted: (() -> Unit)? = null
@@ -29,7 +25,7 @@ class SwarmArFragment : ArFragment() {
         planeDiscoveryController.setInstructionView(null)
         arSceneView.planeRenderer.isEnabled = false
         arSceneView.scene.setOnTouchListener { _, motionEvent ->
-            swarmAnGestureDetector.onTouchEvent(motionEvent)
+            swipeAnGestureDetector.onTouchEvent(motionEvent)
         }
 
         arSceneView.scene.addOnUpdateListener(::onUpdateFrame)
@@ -103,16 +99,9 @@ class SwarmArFragment : ArFragment() {
         }
     }
 
-
-    private val swarmAnGestureDetector = GestureDetector(null, object : GestureDetector.OnGestureListener {
+    private val swipeAnGestureDetector = GestureDetector(null, object : GestureDetector.SimpleOnGestureListener() {
         private val SWIPE_DISTANCE_THRESHOLD = 100
         private val SWIPE_VELOCITY_THRESHOLD = 100
-
-        override fun onShowPress(e: MotionEvent?) {}
-
-        override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            return false
-        }
 
         override fun onDown(e: MotionEvent?): Boolean {
             return true
@@ -137,12 +126,5 @@ class SwarmArFragment : ArFragment() {
 
             return false
         }
-
-        override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
-            return false
-        }
-
-        override fun onLongPress(e: MotionEvent?) {}
     })
-
 }

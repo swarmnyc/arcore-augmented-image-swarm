@@ -17,8 +17,8 @@ class VideoAugmentedImageNode : AugmentedImageNode(ArResources.videoRenderable) 
         offsetZ = (anchorNode.arHeight / 2.0f)
 
         // make video a little bigger to cover the while image
-        scaledWidth *= 1.2f
-        scaledHeight = scaledHeight * 1.2f / videoRatio
+        scaledWidth *= 1.3f
+        scaledHeight = scaledHeight * 1.3f / videoRatio
         scaledDeep = 1f
         localRotation = ArResources.viewRenderableRotation
     }
