@@ -1,92 +1,72 @@
 package com.swarmnyc.arswarm.app
 
-import android.view.MotionEvent
-import android.view.View
-import android.widget.Toast
-import com.google.ar.sceneform.HitTestResult
+import android.Manifest
+import android.app.Activity
+import android.app.AlertDialog
+import android.app.Application
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Bundle
+import android.provider.Settings
 import com.swarmnyc.arswarm.BuildConfig
 import com.swarmnyc.arswarm.R
-import com.swarmnyc.arswarm.ar.AugmentedImageNode
-import com.swarmnyc.arswarm.utils.Logger
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : ArBaseActivity() {
-    private lateinit var arFragment: SwarmArFragment
-    private var selectNode: AugmentedImageNode? = null
-    override val viewId: Int = R.layout.activity_main
+class MainActivity : Activity() {
+    var requiredPermissions = mutableListOf<String>()
 
-    override fun startAr() {
-        arFragment = SwarmArFragment()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        supportFragmentManager.beginTransaction().replace(R.id.ar_fragment, arFragment).commit()
+        setContentView(R.layout.activity_main)
 
-        if (BuildConfig.DEBUG) {
-//            arFragment.setOnStarted = {
-//                arFragment.arSceneView.scene.setOnTouchListener(::handleTouch)
-//
-//                debugInit()
-//            }
+        ensurePermissions()
+
+        btn_host.setOnClickListener {
+            startActivity(Intent(this, HostActivity::class.java))
+        }
+
+        btn_guest.setOnClickListener {
+            startActivity(Intent(this, GuestActivity::class.java))
         }
     }
 
-    private fun handleTouch(hitTestResult: HitTestResult, event: MotionEvent): Boolean {
-        if (selectNode != hitTestResult.node && hitTestResult.node is AugmentedImageNode) {
-            selectNode = hitTestResult.node as AugmentedImageNode
-            Toast.makeText(this, "${selectNode?.name} selected", Toast.LENGTH_SHORT).show()
+    private fun ensurePermissions() {
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requiredPermissions.add(Manifest.permission.CAMERA)
         }
 
-        return true
+        if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            requiredPermissions.add(Manifest.permission.RECORD_AUDIO)
+        }
+
+        if (requiredPermissions.size > 0) {
+            requestPermissions(requiredPermissions.toTypedArray(), 9999)
+        }
     }
 
-    private fun debugInit() {
-        findViewById<View>(R.id.debug_panel).visibility = View.VISIBLE
-        val offset = 0.001f
-        findViewById<View>(R.id.add_x).setOnClickListener {
-            selectNode?.modifyLayout {
-                offsetX += offset
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == 9999) {
+            permissions.forEachIndexed { index, s ->
+                if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
+                    requiredPermissions.remove(s)
+                }
             }
-        }
-        findViewById<View>(R.id.add_y).setOnClickListener {
-            selectNode?.modifyLayout {
-                offsetY += offset
-            }
-        }
-        findViewById<View>(R.id.add_z).setOnClickListener {
-            selectNode?.modifyLayout {
-                offsetZ += offset
-            }
-        }
-        findViewById<View>(R.id.minus_x).setOnClickListener {
-            selectNode?.modifyLayout {
-                offsetX -= offset
-            }
-        }
-        findViewById<View>(R.id.minus_y).setOnClickListener {
-            selectNode?.modifyLayout {
-                offsetY -= offset
-            }
-        }
-        findViewById<View>(R.id.minus_z).setOnClickListener {
-            selectNode?.modifyLayout {
-                offsetZ -= offset
-            }
-        }
 
-        findViewById<View>(R.id.scale_up).setOnClickListener {
-            selectNode?.modifyLayout {
-                scaledWidth += offset
-                scaledHeight += offset
-                scaledDeep += offset
+            if (requiredPermissions.size > 0) {
+                AlertDialog.Builder(this)
+                        .setTitle("WARNING")
+                        .setMessage("No Permission")
+                        .setPositiveButton("Go to settings") { dialog, which ->
+                            startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${BuildConfig.APPLICATION_ID}")))
+                        }
+                        .create()
+                        .show()
             }
         }
-
-        findViewById<View>(R.id.scale_down).setOnClickListener {
-            selectNode?.modifyLayout {
-                scaledWidth -= offset
-                scaledHeight -= offset
-                scaledDeep -= offset
-            }
-        }
-
     }
 }
 

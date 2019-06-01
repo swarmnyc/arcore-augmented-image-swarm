@@ -14,7 +14,9 @@ import com.swarmnyc.arswarm.utils.Logger
 class SwarmArFragment : ArFragment() {
     private val trackableMap = mutableMapOf<String, AugmentedImageAnchorNode>()
 
-    var setOnStarted: (() -> Unit)? = null
+    var onStarted: (() -> Unit)? = null
+
+    var onFrameUpdate: (() -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
@@ -31,7 +33,7 @@ class SwarmArFragment : ArFragment() {
         arSceneView.scene.addOnUpdateListener(::onUpdateFrame)
 
         ArResources.init(this.context!!).handle { _, _ ->
-            setOnStarted?.invoke()
+            onStarted?.invoke()
 
             view.visibility = View.VISIBLE
         }
@@ -97,6 +99,8 @@ class SwarmArFragment : ArFragment() {
                 }
             }
         }
+
+        onFrameUpdate?.invoke()
     }
 
     private val swipeAnGestureDetector = GestureDetector(null, object : GestureDetector.SimpleOnGestureListener() {

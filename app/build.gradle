@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
     compileSdkVersion 28
@@ -12,12 +16,14 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        buildConfigField "String", "AGORA_APP_ID", localProperties.get("AGORA_APP_ID")
+
         ndk {
             /*
              * Sceneform is available for the following ABIs: arm64-v8a, armv7a,
              * x86_64 and x86. This sample app enables arm64-v8a to run on
              * devices and x86 to run on the emulator. Your application should
-             * list the ABIs most appropriate to minimize APK size (arm64-v8a recommended).
+             * requiredPermissions the ABIs most appropriate to minimize APK size (arm64-v8a recommended).
              */
             abiFilters 'arm64-v8a', 'x86'
         }
@@ -27,6 +33,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
         }
     }
 
@@ -41,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
