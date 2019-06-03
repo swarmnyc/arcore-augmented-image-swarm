@@ -2,6 +2,7 @@ package com.swarmnyc.arswarm.app
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import com.swarmnyc.arswarm.BuildConfig
 import com.swarmnyc.arswarm.R
 import com.swarmnyc.arswarm.utils.Logger
@@ -29,11 +30,22 @@ class GuestActivity : Activity() {
         override fun onUserJoined(uid: Int, elapsed: Int) {
             super.onUserJoined(uid, elapsed)
             Logger.d("onUserJoined $uid")
+            if (uid == 1){
+                runOnUiThread {
+                    Toast.makeText(baseContext, "Connected to the Host", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         override fun onUserOffline(uid: Int, reason: Int) {
             Logger.d("onUserOffline $uid")
-            runOnUiThread { root.removeViewAt(1) }
+            runOnUiThread { root.removeAllViews() }
+
+            if (uid == 1){
+                runOnUiThread {
+                    Toast.makeText(baseContext, "Disconnected from the Host", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         override fun onError(err: Int) {

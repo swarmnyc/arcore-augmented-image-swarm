@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.PixelCopy
+import android.widget.Toast
 import com.swarmnyc.arswarm.BuildConfig
 import com.swarmnyc.arswarm.utils.Logger
 import io.agora.rtc.Constants
@@ -13,7 +14,6 @@ import io.agora.rtc.mediaio.IVideoFrameConsumer
 import io.agora.rtc.mediaio.IVideoSource
 import io.agora.rtc.mediaio.MediaIO
 import io.agora.rtc.video.VideoEncoderConfiguration
-import kotlinx.android.synthetic.main.activity_guest.*
 import java.nio.ByteBuffer
 
 
@@ -30,11 +30,16 @@ class HostActivity : ArBaseActivity() {
         override fun onUserJoined(uid: Int, elapsed: Int) {
             super.onUserJoined(uid, elapsed)
             Logger.d("onUserJoined $uid")
+            runOnUiThread {
+                Toast.makeText(baseContext, "A guest connected", Toast.LENGTH_LONG).show()
+            }
         }
 
         override fun onUserOffline(uid: Int, reason: Int) {
             Logger.d("onUserOffline $uid")
-            runOnUiThread { root.removeViewAt(1) }
+            runOnUiThread {
+                Toast.makeText(baseContext, "A guest disconnected", Toast.LENGTH_LONG).show()
+            }
         }
 
         override fun onError(err: Int) {
@@ -55,7 +60,6 @@ class HostActivity : ArBaseActivity() {
         override fun onFirstLocalVideoFrame(width: Int, height: Int, elapsed: Int) {
             super.onFirstLocalVideoFrame(width, height, elapsed)
             Logger.d("onFirstLocalVideoFrame $width, $height")
-
         }
     }
     private lateinit var arFragment: SwarmArFragment
@@ -78,7 +82,7 @@ class HostActivity : ArBaseActivity() {
 
         mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
         mRtcEngine.enableDualStreamMode(true)
-        mRtcEngine.setVideoEncoderConfiguration(VideoEncoderConfiguration(VideoEncoderConfiguration.VD_640x480,
+        mRtcEngine.setVideoEncoderConfiguration(VideoEncoderConfiguration(VideoEncoderConfiguration.VD_1280x720,
                 VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
                 VideoEncoderConfiguration.STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE))
@@ -98,8 +102,8 @@ class HostActivity : ArBaseActivity() {
         PixelCopy.request(view, bitmap, { copyResult ->
             if (copyResult == PixelCopy.SUCCESS) {
                 if (mSource.consumer != null) {
-//                    Logger.d("Send Frame")
-                    val nb = Bitmap.createScaledBitmap(bitmap, 480, 640, false)
+                    // Logger.d("Send Frame")
+                    val nb = Bitmap.createScaledBitmap(bitmap, 720, 1280, false)
                     val size = nb.rowBytes * nb.height
                     val byteBuffer = ByteBuffer.allocate(size)
                     nb.copyPixelsToBuffer(byteBuffer)
