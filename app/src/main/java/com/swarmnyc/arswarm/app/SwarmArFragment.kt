@@ -63,12 +63,12 @@ class SwarmArFragment : ArFragment() {
         Logger.d("create : ${image.name}(${image.index}), pose: ${image.centerPose}, ex: ${image.extentX}, ez: ${image.extentZ}")
 
         when (image.name) {
-            "swarm" -> {
+            "swarm", "banner" -> {
                 val node = SwarmAnchorNode().init(image)
                 trackableMap[image.name] = node
                 arSceneView.scene.addChild(node)
 
-                Toast.makeText(context, "add swarm", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "add ${image.name}", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -87,7 +87,8 @@ class SwarmArFragment : ArFragment() {
                     if (trackableMap[image.name]?.update(image) == true) {
                         Logger.d("update node: ${image.name}(${image.index}), pose: ${image.centerPose}, ex: ${image.extentX}, ez: ${image.extentZ}")
                     }
-                } else {
+                } else if (trackableMap.isEmpty()) {
+                    // only show one node
                     createArNode(image)
                 }
                 TrackingState.STOPPED -> {
@@ -112,7 +113,7 @@ class SwarmArFragment : ArFragment() {
         }
 
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-            val swarmAN = trackableMap["swarm"] as? SwarmAnchorNode
+            val swarmAN = trackableMap.values.firstOrNull() as? SwarmAnchorNode
 
             if (swarmAN != null && swarmAN.isActive) {
                 val distanceX = e2.x - e1.x
