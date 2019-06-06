@@ -1,1 +1,2 @@
-swarm|./swarm.png
+swarm|.//swarm.png
+banner|.//banner.png
