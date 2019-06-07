@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/visit_our_website"
-    android:textColor="@color/swarmColor" />
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/image"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:scaleType="fitXY"
+    android:src="@drawable/qrcode" />
