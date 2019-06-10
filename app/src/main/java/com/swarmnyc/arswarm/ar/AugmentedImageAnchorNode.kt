@@ -6,7 +6,7 @@ import com.swarmnyc.arswarm.utils.Logger
 
 abstract class AugmentedImageAnchorNode : AnchorNode() {
     companion object {
-        const val sizeChangeThresholder = 0.001f // 1cm
+        const val SizeChangeThreshold = 0.001f // 1cm
     }
 
     // the real image size
@@ -27,7 +27,7 @@ abstract class AugmentedImageAnchorNode : AnchorNode() {
         private set
 
     fun init(image: AugmentedImage): AugmentedImageAnchorNode {
-        Logger.d("${javaClass.simpleName} inited")
+        Logger.d("${javaClass.simpleName} initialized")
 
         // Set the anchor based on the center of the image.
         anchor = image.createAnchor(image.centerPose)
@@ -43,7 +43,7 @@ abstract class AugmentedImageAnchorNode : AnchorNode() {
         val nWidth = Math.abs(image.extentX)
         val nHeight = Math.abs(image.extentZ)
 
-        if (Math.abs(nWidth - arWidth) > sizeChangeThresholder || Math.abs(nHeight - arHeight) > sizeChangeThresholder) {
+        if (Math.abs(nWidth - arWidth) > SizeChangeThreshold || Math.abs(nHeight - arHeight) > SizeChangeThreshold) {
             updateSize(nWidth, nHeight)
 
             this.children.forEach {

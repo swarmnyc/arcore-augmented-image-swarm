@@ -91,7 +91,9 @@ class SwarmArFragment : ArFragment() {
                 TrackingState.STOPPED -> {
                     Logger.d("remove note: ${image.name}(${image.index})")
 
-                    trackableMap.remove(image.name)
+                    trackableMap.remove(image.name).let {
+                        arSceneView.scene.removeChild(it)
+                    }
                 }
                 else -> {
                 }
