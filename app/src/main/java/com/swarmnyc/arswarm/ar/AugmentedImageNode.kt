@@ -69,6 +69,6 @@ abstract class AugmentedImageNode(resource: CompletableFuture<*>? = null) : Node
         localScale = Vector3(scaledWidth, scaledHeight, scaledDeep)
         localPosition = Vector3(offsetX, offsetY, offsetZ)
 
-        Logger.d("${javaClass.simpleName} modifyLayout: scale: ($scaledWidth, $scaledHeight, $scaledDeep), xyc: ($offsetX, $offsetY, $offsetZ)")
+        Logger.d("${javaClass.simpleName} modifyLayout: scale: ($scaledWidth, $scaledHeight, $scaledDeep), xyz: ($offsetX, $offsetY, $offsetZ)")
     }
 }
