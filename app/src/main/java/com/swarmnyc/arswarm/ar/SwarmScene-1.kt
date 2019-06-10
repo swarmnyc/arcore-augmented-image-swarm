@@ -30,7 +30,7 @@ class MakeAppAugmentedImageNode : AugmentedImageNode(ArResources.makeAppRenderea
     }
 }
 
-class HeartAugmentedImageNode : AugmentedImageNode(ArResources.heartRendereable) {
+open class HeartAugmentedImageNode : AugmentedImageNode(ArResources.heartRendereable) {
 
     private var animation: ObjectAnimator? = null
 

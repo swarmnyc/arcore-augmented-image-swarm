@@ -8,6 +8,7 @@ import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.ux.ArFragment
 import com.swarmnyc.arswarm.ar.AugmentedImageAnchorNode
 import com.swarmnyc.arswarm.ar.ArResources
+import com.swarmnyc.arswarm.ar.BannerAnchorNode
 import com.swarmnyc.arswarm.ar.SwarmAnchorNode
 import com.swarmnyc.arswarm.utils.Logger
 
@@ -62,14 +63,17 @@ class SwarmArFragment : ArFragment() {
     private fun createArNode(image: AugmentedImage) {
         Logger.d("create : ${image.name}(${image.index}), pose: ${image.centerPose}, ex: ${image.extentX}, ez: ${image.extentZ}")
 
-        when (image.name) {
-            "swarm", "banner" -> {
-                val node = SwarmAnchorNode().init(image)
-                trackableMap[image.name] = node
-                arSceneView.scene.addChild(node)
+        val node = when (image.name) {
+            "banner" -> BannerAnchorNode()
+            "swarm" -> SwarmAnchorNode()
+            else -> null
+        }
 
-                Toast.makeText(context, "${image.name} added", Toast.LENGTH_LONG).show()
-            }
+        if (node != null) {
+            trackableMap[image.name] = node.init(image)
+            arSceneView.scene.addChild(node)
+
+            Toast.makeText(context, "${image.name} added", Toast.LENGTH_LONG).show()
         }
     }
 
