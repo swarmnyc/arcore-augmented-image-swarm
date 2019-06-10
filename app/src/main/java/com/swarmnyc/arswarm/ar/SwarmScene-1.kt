@@ -15,7 +15,7 @@ class SwarmScene1 : AugmentedImageNodeGroup() {
         SwarmAugmentedImageNode().init(anchorNode, this)
         MakeAppAugmentedImageNode().init(anchorNode, this)
         HeartAugmentedImageNode().init(anchorNode, this)
-        HintSwipeAugmentedImageNode().init(anchorNode, this)
+//        HintSwipeAugmentedImageNode().init(anchorNode, this)
     }
 }
 
