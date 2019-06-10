@@ -68,7 +68,7 @@ class SwarmArFragment : ArFragment() {
                 trackableMap[image.name] = node
                 arSceneView.scene.addChild(node)
 
-                Toast.makeText(context, "add ${image.name}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "${image.name} added", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -92,7 +92,8 @@ class SwarmArFragment : ArFragment() {
                     createArNode(image)
                 }
                 TrackingState.STOPPED -> {
-                    Logger.d("remove note: ${image.name}(${image.index})")
+                    Logger.d("remove node: ${image.name}(${image.index})")
+                    Toast.makeText(context, "${image.name} removed", Toast.LENGTH_LONG).show()
 
                     trackableMap.remove(image.name).let {
                         arSceneView.scene.removeChild(it)

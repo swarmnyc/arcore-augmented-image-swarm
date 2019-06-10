@@ -10,6 +10,7 @@ abstract class AugmentedImageNodeGroup : Node() {
     lateinit var anchorNode: AugmentedImageAnchorNode
 
     fun init(anchorNode: AugmentedImageAnchorNode): AugmentedImageNodeGroup {
+        this.isEnabled = false
         this.anchorNode = anchorNode
 
         name = this.javaClass.simpleName.replace("AugmentedImageNodeGroup", "")
