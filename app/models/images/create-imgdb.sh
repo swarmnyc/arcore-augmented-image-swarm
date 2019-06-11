@@ -1,1 +1,1 @@
-arcoreimg build-db --output_db_path=../../src/main/assets/ar.imgdb --input_image_list_path=imgdb-list.txt
+./arcoreimg build-db --output_db_path=../../src/main/assets/ar.imgdb --input_image_list_path=imgdb-list.txt

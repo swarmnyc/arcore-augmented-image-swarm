@@ -7,7 +7,6 @@ import android.view.PixelCopy
 import android.widget.Toast
 import com.swarmnyc.arswarm.BuildConfig
 import com.swarmnyc.arswarm.utils.Logger
-import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.mediaio.IVideoFrameConsumer
@@ -80,13 +79,13 @@ class HostActivity : ArBaseActivity() {
     private fun initRtcEngine() {
         mRtcEngine = RtcEngine.create(baseContext, BuildConfig.AGORA_APP_ID, mRtcEventHandler)
 
-        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
+//        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
         mRtcEngine.enableDualStreamMode(true)
         mRtcEngine.setVideoEncoderConfiguration(VideoEncoderConfiguration(VideoEncoderConfiguration.VD_1280x720,
                 VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
                 VideoEncoderConfiguration.STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE))
-        mRtcEngine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER)
+//        mRtcEngine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER)
 
         mRtcEngine.disableAudio()
         mRtcEngine.enableVideo()

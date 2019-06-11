@@ -4,7 +4,7 @@ class BannerAnchorNode : SwarmAnchorNode() {
     companion object{
         // TODO: change the multiplier to match the size
         // the bigger factor that get smaller 3D models
-        const val ScaleFactor = 1.1f
+        const val ScaleFactor = 1.05f
     }
 
     override val imageWidth: Float = 1F * ScaleFactor
