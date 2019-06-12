@@ -15,10 +15,11 @@ class VideoAugmentedImageNode : AugmentedImageNode(ArResources.videoRenderable) 
         val videoRatio = ArResources.videoPlayer.videoWidth.toFloat() / ArResources.videoPlayer.videoHeight
 
         offsetZ = (anchorNode.arHeight / 2.0f)
+        offsetZ *= 0.8f
 
         // make video a little bigger to cover the while image
-        scaledWidth *= 1.3f
-        scaledHeight = scaledHeight * 1.3f / videoRatio
+        scaledWidth *= 1.0f
+        scaledHeight = scaledHeight * 1.1f / videoRatio
         scaledDeep = 1f
         localRotation = ArResources.viewRenderableRotation
     }

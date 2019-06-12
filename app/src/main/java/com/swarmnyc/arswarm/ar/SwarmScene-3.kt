@@ -36,9 +36,9 @@ class VisitAugmentedImageNode : AugmentedImageNode(ArResources.visitRenderable) 
     }
 
     override fun onTouchEvent(p0: HitTestResult?, p1: MotionEvent?): Boolean {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.swarmnyc.com"))
+        //val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.swarmnyc.com"))
 
-        this.scene?.view?.context?.startActivity(intent)
+        //this.scene?.view?.context?.startActivity(intent)
 
         return false
     }
